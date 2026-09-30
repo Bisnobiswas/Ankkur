@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANKKUR | Next-Gen Saline-Resilient Agriculture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fraunces:opsz,wght@9..144,400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D4F1E;
+            --secondary: #8BA888;
+            --accent: #D4A373;
+            --accent-light: #f0dfc0;
+            --bg-warm: #FAF9F6;
+            --text-main: #1C1C1C;
+            --card-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4 { font-family: 'Fraunces', serif; }
+
+        /* NAV */
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(250,249,246,0.92);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        nav .logo { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--primary); letter-spacing: 0.05em; }
+        nav ul { display: flex; gap: 2rem; list-style: none; }
+        nav ul a { text-decoration: none; color: var(--text-main); font-size: 0.875rem; font-weight: 600; opacity: 0.7; transition: opacity 0.2s; }
+        nav ul a:hover { opacity: 1; color: var(--primary); }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #3d6b28 60%, #5a8a40 100%);
+            color: white;
+            padding: 6rem 2rem 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 999px;
+            padding: 0.35rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            letter-spacing: 0.04em;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.85;
+            max-width: 560px;
+            margin: 0 auto 2.5rem;
+            font-weight: 300;
+        }
+        .hero-cta {
+            display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 0.85rem 2rem;
+            border-radius: 0.6rem;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none; cursor: pointer;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.6);
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 0.6rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-outline:hover { background: rgba(255,255,255,0.15); }
+
+        /* STATS BAR */
+        .stats-bar {
+            background: var(--primary);
+            color: white;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            text-align: center;
+            border-bottom: 3px solid var(--accent);
+        }
+        .stat-item {
+            padding: 1.8rem 1rem;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-num { font-family: 'Fraunces', serif; font-size: 2.2rem; color: var(--accent); }
+        .stat-label { font-size: 0.78rem; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* SECTIONS */
+        section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+        .section-eyebrow {
+            text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.12em;
+            color: var(--secondary); font-weight: 700; margin-bottom: 0.6rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--primary); margin-bottom: 1rem; }
+        .section-sub { font-size: 1rem; opacity: 0.65; max-width: 560px; margin-bottom: 3rem; }
+
+        /* CARDS */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .card:hover { box-shadow: 0 10px 30px rgba(45,79,30,0.1); transform: translateY(-2px); }
+
+        /* SEEDS GRID */
+        .seeds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .seed-card {
+            border: 1.5px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            background: white;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .seed-card:hover { border-color: var(--secondary); box-shadow: 0 6px 18px rgba(45,79,30,0.09); }
+        .seed-tag {
+            display: inline-block;
+            background: #ecf4ec;
+            color: var(--primary);
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            margin-top: 0.3rem;
+        }
+        .seed-price { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--primary); }
+
+        /* FERTILIZER CARDS */
+        .fert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+        .fert-card {
+            background: linear-gradient(135deg, #f0f7ed, #e4f0e1);
+            border: 1px solid #c8dfc5;
+            border-radius: 0.75rem;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .fert-name { font-weight: 800; font-size: 1rem; color: var(--primary); }
+        .fert-price { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--primary); }
+        .fert-label { font-size: 0.72rem; opacity: 0.6; }
+
+        /* CHART */
+        .chart-card { padding: 2rem; }
+        .chart-wrap { height: 300px; position: relative; }
+
+        /* IMPACT GRID */
+        .impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+        .impact-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .impact-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .impact-title { font-family: 'Fraunces', serif; color: var(--primary); font-size: 1.1rem; margin-bottom: 0.4rem; }
+        .impact-desc { font-size: 0.82rem; opacity: 0.65; }
+
+        /* CONTACT */
+        .contact-section {
+            background: var(--primary);
+            color: white;
+            padding: 5rem 2rem;
+        }
+        .contact-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        @media (max-width: 640px) {
+            .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+            nav ul { display: none; }
+        }
+        .contact-heading { font-size: 2.5rem; margin-bottom: 1rem; }
+        .contact-sub { opacity: 0.7; font-size: 0.95rem; margin-bottom: 2rem; }
+        .contact-item {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 1.4rem;
+        }
+        .contact-icon {
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 0.6rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .contact-info a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .contact-info a:hover { text-decoration: underline; }
+        .contact-info .label { font-size: 0.72rem; opacity: 0.55; text-transform: uppercase; letter-spacing: 0.08em; }
+
+        /* FORM */
+        .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+        .contact-form input,
+        .contact-form textarea {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 0.6rem;
+            padding: 0.85rem 1rem;
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            resize: vertical;
+        }
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder { opacity: 0.45; }
+        .contact-form input:focus,
+        .contact-form textarea:focus { border-color: var(--accent); }
+        .contact-form button {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 0.9rem;
+            border-radius: 0.6rem;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .contact-form button:hover { opacity: 0.88; }
+
+        /* FOOTER */
+        footer {
+            background: #111;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            padding: 1.8rem;
+            font-size: 0.8rem;
+        }
+        footer span { color: var(--accent); }
+
+        /* DIVIDER */
+        .divider { border: none; border-top: 1px solid #e5e7eb; margin: 0; }
+
+        /* SCROLL ANIMATION */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: none; }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="logo">ANKKUR</div>
+    <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#impact">Impact</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn-primary" style="padding:0.55rem 1.2rem; font-size:0.82rem;">Get in Touch</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-badge">🌿 Bangladesh's Salt-Land Solution</div>
+    <h1>ANKKUR</h1>
+    <p>Next-generation saline-resilient agriculture for coastal Bangladesh — empowering farmers where the land fights back.</p>
+    <div class="hero-cta">
+        <a href="#products" class="btn-primary">Explore Products</a>
+        <a href="#contact" class="btn-outline">Talk to Us</a>
+    </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+    <div class="stat-item">
+        <div class="stat-num">95%</div>
+        <div class="stat-label">Sustainability Score</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Soil Restoration</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">80%</div>
+        <div class="stat-label">Cost Efficiency</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">90%</div>
+        <div class="stat-label">Carbon Capture</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">75%</div>
+        <div class="stat-label">Yield Improvement</div>
+    </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="fade-in">
+    <p class="section-eyebrow">Who We Are</p>
+    <h2 class="section-title">Growing where others give up</h2>
+    <p class="section-sub">ANKKUR develops salt-resistant seed variants and bio-fertilizer systems engineered specifically for the saline-affected coastal regions of Bangladesh — turning degraded land into productive farms.</p>
+    <div class="impact-grid">
+        <div class="impact-item">
+            <div class="impact-icon">🌱</div>
+            <div class="impact-title">Salt-Resistant Seeds</div>
+            <div class="impact-desc">Proven varieties bred to thrive in high-salinity soil conditions.</div>
+        </div>
+        <div class="impact-item">
+            <div class="impact-icon">🧪</div>
+            <div class="impact-title">Bio-Fertilizers</div>
+            <div class="impact-desc">Microbial units that restore soil health without harsh chemicals.</div>
+        </div>
+        <div class="impact-item">
+            <div class="impact-icon">💧</div>
+            <div class="impact-title">Water Efficiency</div>
+            <div class="impact-desc">Optimized growing systems that reduce water dependency.</div>
+        </div>
+        <div class="impact-item">
+            <div class="impact-icon">🤝</div>
+            <div class="impact-title">Farmer Support</div>
+            <div class="impact-desc">Direct guidance and resources for smallholder farmers.</div>
+        </div>
+    </div>
+</section>
+
+<hr class="divider">
+
+<!-- PRODUCTS / PRICING -->
+<section id="products" class="fade-in">
+    <p class="section-eyebrow">Seeds & Inputs</p>
+    <h2 class="section-title">Seed Management & Pricing</h2>
+    <p class="section-sub">All variants are salt-resistant and field-tested in coastal Bangladesh conditions.</p>
+
+    <div class="seeds-grid">
+        <div class="seed-card">
+            <div>
+                <p style="font-weight:700; font-size:1.05rem;">Cherry Tomato</p>
+                <span class="seed-tag">Salt-Resistant Variant</span>
+            </div>
+            <div class="seed-price">85<span style="font-size:1rem; font-family:'Plus Jakarta Sans'; font-weight:600;">/- BDT</span></div>
+        </div>
+        <div class="seed-card">
+            <div>
+                <p style="font-weight:700; font-size:1.05rem;">Lady Finger / Okra</p>
+                <span class="seed-tag">Salt-Resistant Variant</span>
+            </div>
+            <div class="seed-price">75<span style="font-size:1rem; font-family:'Plus Jakarta Sans'; font-weight:600;">/- BDT</span></div>
+        </div>
+        <div class="seed-card">
+            <div>
+                <p style="font-weight:700; font-size:1.05rem;">Brinjal</p>
+                <span class="seed-tag">Salt-Resistant Variant</span>
+            </div>
+            <div class="seed-price">70<span style="font-size:1rem; font-family:'Plus Jakarta Sans'; font-weight:600;">/- BDT</span></div>
+        </div>
+    </div>
+
+    <!-- Bio-Fertilizers -->
+    <div style="margin-top:3rem;">
+        <p class="section-eyebrow">Bio-Fertilizer Units</p>
+        <h3 style="font-family:'Fraunces',serif; font-size:1.5rem; color:var(--primary); margin-bottom:0.5rem;">Microbial Soil Solutions</h3>
+        <p style="opacity:0.6; font-size:0.9rem; margin-bottom:1.5rem;">Natural bio-inoculants to restore soil biology and boost nutrient uptake.</p>
+        <div class="fert-grid" style="max-width:400px;">
+            <div class="fert-card">
+                <div class="fert-label">Nitrogen-Fixing</div>
+                <div class="fert-name">BN3</div>
+                <div class="fert-price">800<span style="font-size:0.85rem; font-family:'Plus Jakarta Sans'; font-weight:600;">/- BDT</span></div>
+            </div>
+            <div class="fert-card">
+                <div class="fert-label">Phosphate-Solubilizing</div>
+                <div class="fert-name">BP2</div>
+                <div class="fert-price">750<span style="font-size:0.85rem; font-family:'Plus Jakarta Sans'; font-weight:600;">/- BDT</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="divider">
+
+<!-- IMPACT CHART -->
+<section id="impact" class="fade-in">
+    <p class="section-eyebrow">Performance</p>
+    <h2 class="section-title">Our Impact Roadmap</h2>
+    <p class="section-sub">How the ANKKUR system scores across the metrics that matter most for sustainable coastal agriculture.</p>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; align-items:center;" class="chart-layout">
+        <div class="card chart-card">
+            <div class="chart-wrap">
+                <canvas id="impactChart"></canvas>
+            </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:1rem;">
+            <div class="impact-item" style="text-align:left; flex-direction:row; display:flex; align-items:center; gap:1rem;">
+                <div style="width:12px; height:12px; background:var(--primary); border-radius:50%; flex-shrink:0;"></div>
+                <div>
+                    <div style="font-weight:700; font-size:0.92rem;">Sustainability — 95%</div>
+                    <div style="font-size:0.78rem; opacity:0.6;">Long-term ecological balance preserved</div>
+                </div>
+            </div>
+            <div class="impact-item" style="text-align:left; flex-direction:row; display:flex; align-items:center; gap:1rem;">
+                <div style="width:12px; height:12px; background:#4a8a3a; border-radius:50%; flex-shrink:0;"></div>
+                <div>
+                    <div style="font-weight:700; font-size:0.92rem;">Soil Restoration — 98%</div>
+                    <div style="font-size:0.78rem; opacity:0.6;">Degraded saline land brought back to health</div>
+                </div>
+            </div>
+            <div class="impact-item" style="text-align:left; flex-direction:row; display:flex; align-items:center; gap:1rem;">
+                <div style="width:12px; height:12px; background:var(--accent); border-radius:50%; flex-shrink:0;"></div>
+                <div>
+                    <div style="font-weight:700; font-size:0.92rem;">Cost Efficiency — 80%</div>
+                    <div style="font-size:0.78rem; opacity:0.6;">Affordable for smallholder farmers</div>
+                </div>
+            </div>
+            <div class="impact-item" style="text-align:left; flex-direction:row; display:flex; align-items:center; gap:1rem;">
+                <div style="width:12px; height:12px; background:#8BA888; border-radius:50%; flex-shrink:0;"></div>
+                <div>
+                    <div style="font-weight:700; font-size:0.92rem;">Carbon Capture — 90%</div>
+                    <div style="font-size:0.78rem; opacity:0.6;">Measurable environmental contribution</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+    <div class="contact-inner">
+        <div>
+            <p style="text-transform:uppercase; font-size:0.72rem; letter-spacing:0.12em; opacity:0.6; margin-bottom:0.6rem; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700;">Reach Us</p>
+            <h2 class="contact-heading">Let's grow together</h2>
+            <p class="contact-sub">Whether you're a farmer, investor, researcher, or partner — we'd love to hear from you.</p>
+
+            <div class="contact-item">
+                <div class="contact-icon">📞</div>
+                <div class="contact-info">
+                    <div class="label">Phone</div>
+                    <a href="tel:+8801938960742">01938960742</a>
+                </div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">✉️</div>
+                <div class="contact-info">
+                    <div class="label">Email</div>
+                    <a href="mailto:teamankkur@gmail.com">teamankkur@gmail.com</a>
+                </div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <div class="contact-info">
+                    <div class="label">Region</div>
+                    <span style="font-weight:600; color:rgba(255,255,255,0.85);">Coastal Bangladesh</span>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <p style="font-family:'Fraunces',serif; font-size:1.2rem; margin-bottom:1.2rem; opacity:0.9;">Send us a message</p>
+            <form class="contact-form" onsubmit="handleSubmit(event)">
+                <input type="text" placeholder="Your name" required>
+                <input type="email" placeholder="Your email" required>
+                <input type="text" placeholder="Subject (e.g. Seed inquiry, Partnership)">
+                <textarea placeholder="Your message..." rows="4" required></textarea>
+                <button type="submit">Send Message →</button>
+            </form>
+            <p id="form-success" style="display:none; margin-top:1rem; background:rgba(255,255,255,0.1); border-radius:0.6rem; padding:1rem; font-size:0.9rem; opacity:0.9;">
+                ✅ Message sent! We'll get back to you soon.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2025 <span>ANKKUR</span> — Next-Generation Saline-Resilient Agriculture &nbsp;|&nbsp; Made with 🌿 for Bangladesh's coastal farmers</p>
+</footer>
+
+<script>
+    // CHART
+    const ctx = document.getElementById('impactChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Sustainability', 'Soil Restoration', 'Cost Efficiency', 'Yield', 'Carbon Capture'],
+            datasets: [{
+                label: 'ANKKUR Solution',
+                data: [95, 98, 80, 75, 90],
+                borderColor: '#2D4F1E',
+                backgroundColor: 'rgba(45, 79, 30, 0.18)',
+                pointBackgroundColor: '#2D4F1E',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#D4A373',
+                borderWidth: 2.5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: { display: false },
+                    grid: { color: 'rgba(0,0,0,0.07)' },
+                    pointLabels: {
+                        font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' },
+                        color: '#2D4F1E'
+                    }
+                }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // SCROLL ANIMATION
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // FORM
+    function handleSubmit(e) {
+        e.preventDefault();
+        e.target.style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+    }
+
+    // RESPONSIVE: chart layout
+    if (window.innerWidth < 700) {
+        const layout = document.querySelector('.chart-layout');
+        if (layout) layout.style.gridTemplateColumns = '1fr';
+    }
+</script>
+</body>
+</html>
